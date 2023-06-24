@@ -1,0 +1,692 @@
+------------------------------------------------------------------------------
+> show dbs
+Admission_Prediction                              0.000GB
+admin                                             0.000GB
+admission                                         0.000GB
+config                                            0.000GB
+demoDB                                            0.000GB
+goodEducation                                     0.000GB
+local                                             0.000GB
+pollingData                                       0.000GB
+primary-preferences-allocations-by-school-2018-4  0.000GB
+
+------------------------------------------------------------------------------
+> use demoDB
+switched to db demoDB
+
+
+------------------------------------------------------------------------------
+> show tables
+Studentmark
+mycol
+
+-------------------------------------------------------------------------------
+Insert single
+
+db.mycol.insert({
+	"title" : "MongoDB Overview",
+	"description" : "MongoDB is no SQL database",
+	"by" : "tutorials point",
+	"url" : "http://www.tutorialspoint.com",
+	"tags" : [
+		"mongodb",
+		"database",
+		"NoSQL"
+	],
+	"likes" : 100
+})
+
+
+-----------------------------------------------------------------------------------
+Insert many 
+
+
+db.mycol.insert([
+{
+	"title" : "MongoDB Overview",
+	"description" : "MongoDB is no SQL database",
+	"by" : "tutorials point",
+	"url" : "http://www.tutorialspoint.com",
+	"tags" : [
+		"mongodb",
+		"database",
+		"NoSQL"
+	],
+	"likes" : 100
+}
+{
+	"title" : "NoSQL Database",
+	"description" : "NoSQL database doesn't have tables",
+	"by" : "tutorials point",
+	"url" : "http://www.tutorialspoint.com",
+	"tags" : [
+		"mongodb",
+		"database",
+		"NoSQL"
+	],
+	"likes" : 20,
+	"comments" : [
+		{
+			"user" : "user1",
+			"message" : "My first comment",
+			"dateCreated" : ISODate("2013-12-09T21:05:00Z"),
+			"like" : 0
+		}
+	]
+}
+])
+
+
+------------------------------------------------------------
+Find 
+
+> db.mycol.find().pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f9"),
+        "title" : "NoSQL Overview",
+        "description" : "No sql database is very fast",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 10
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+
+
+
+-----------------------------------------------------------------------------------
+Equality
+
+> db.mycol.find({title:"MongoDB Overview"}).pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+
+
+--------------------------------------------------------------------
+Equality
+
+> db.mycol.find({title:"MongoDB Overview"},{title:1,_id:0,likes:1}).pretty()
+{ "title" : "MongoDB Overview", "likes" : 100 }
+{ "title" : "MongoDB Overview", "likes" : 45 }
+
+
+------------------------------------------------------------------------
+Less Than
+
+> db.mycol.find(
+					{"likes":
+								{	$lt:50	}
+					}
+				).pretty()
+				
+
+=============>  
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f9"),
+        "title" : "NoSQL Overview",
+        "description" : "No sql database is very fast",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 10
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+
+--------------------------------------------------------------------------
+Less Than Equals
+
+> db.mycol.find(
+					{"likes":
+							{	$lte:44	}
+					}
+				).pretty()
+				
+===================>
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f9"),
+        "title" : "NoSQL Overview",
+        "description" : "No sql database is very fast",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 10
+}
+-----------------------------------------------------------------------------
+Greater Than
+
+db.mycol.find(
+				{"likes":
+							{	$gt:50	}
+				}
+			).pretty()
+=========>
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+-------------------------------------------------------------------------------
+Greater Than Equals
+
+> db.mycol.find(
+					{"likes":
+								{	$gte:50	}
+					}
+				).pretty()
+=========>
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+----------------------------------------------------------------------------------
+Not Equals
+
+> db.mycol.find({"likes":{$ne:45}}).pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f9"),
+        "title" : "NoSQL Overview",
+        "description" : "No sql database is very fast",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 10
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+-------------------------------------------------------------------------------
+Values in an array
+
+> db.mycol.find({"tags":{$in:["NoSQL","database"]}}).pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f9"),
+        "title" : "NoSQL Overview",
+        "description" : "No sql database is very fast",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 10
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+----------------------------------------------------------------------------
+Values not in an array
+
+> db.mycol.find({"tags":{$nin:["mongodb"]}}).pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+
+-----------------------------------------------------------------------------
+OR in MongoDB
+>db.mycol.find(
+   {
+      $or: [
+         {key1: value1}, {key2:value2}
+      ]
+   }
+).pretty()
+
+
+> db.mycol.find(
+					{	$or:
+								[
+									{"by":"tutorials point"},{"title": "MongoDB Overview"}
+								]
+					}
+				).pretty()
+============>
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+------------------------------------------------------------------------------------
+Using AND and OR Together
+> db.mycol.find(
+					{"likes": {$gt:10} , $or: 
+												[
+													{"by": "tutorials point"},    {"title": "MongoDB Overview"}
+												]
+					}
+				).pretty()
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+-----------------------------------------------------------------------------------------
+NOT in MongoDB
+>db.COLLECTION_NAME.find(
+	{
+		$not: [
+			{key1: value1}, {key2:value2}
+		]
+	}
+)
+
+------------------------------------------------------------------------------------------------
+Update() Method
+
+> db.mycol.update(
+					{'title':'MongoDB Overview'},
+					{$set:	{	'title':'	New MongoDB Tutorial'	}}
+				)
+=============>
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.mycol.find({},{title:1})
+{ "_id" : ObjectId("608fe1ef94bd3450b223e5f8"), "title" : "New MongoDB Tutorial" }
+{ "_id" : ObjectId("608fe1ef94bd3450b223e5f9"), "title" : "NoSQL Overview" }
+{ "_id" : ObjectId("608fe1ef94bd3450b223e5fa"), "title" : "Neo4j Overview" }
+{ "_id" : ObjectId("608fe51c2ef5257592864750"), "title" : "MongoDB Overview" }
+
+-------------------------------------------------------------------------------------------------
+
+findOneAndUpdate()
+>db.COLLECTION_NAME.findOneAndUpdate(SELECTIOIN_CRITERIA, UPDATED_DATA)
+
+updateOne() method
+>db.COLLECTION_NAME.updateOne(<filter>, <update>)
+
+updateMany() method
+>db.COLLECTION_NAME.updateMany(<filter>, <update>)
+-------------------------------------------------------------------------------------------------
+
+sort() Method
+>db.COLLECTION_NAME.find().sort({KEY:1})
+
+---------------------------------------------------------------------------------------------------
+
+Limit() Method
+>db.COLLECTION_NAME.find().limit(4)
+
+Skip() Method
+>db.COLLECTION_NAME.find().skip(4)
+
+--------------------------------------------------------------------------------------------------
+
+aggregate() Method
+
+sum
+> db.mycol.aggregate([
+						{	$group : 
+									{	_id : "$by_user", 
+										num_tutorial : {$sum : 1}
+									}
+						}
+					])
+==========>
+{ "_id" : "Neo4j", "num_tutorial" : 1 }
+{ "_id" : null, "num_tutorial" : 1 }
+{ "_id" : "tutorials point", "num_tutorial" : 2 }
+---------------------------------------------------------------
+avg
+> db.mycol.aggregate([
+						{	$group : 
+									{	_id : "$by_user", 
+										num_tutorial : {$avg : "$likes"}
+									}
+						}
+					])
+================>
+{ "_id" : "Neo4j", "num_tutorial" : 750 }
+{ "_id" : null, "num_tutorial" : 45 }
+{ "_id" : "tutorials point", "num_tutorial" : 55 }
+
+---------------------------------------------------------------------
+min
+> db.mycol.aggregate([
+						{	$group : 
+									{	_id : "$by_user", 
+										num_tutorial : {$min : "$likes"}
+									}
+						}
+					])
+============>
+{ "_id" : "tutorials point", "num_tutorial" : 10 }
+{ "_id" : null, "num_tutorial" : 45 }
+{ "_id" : "Neo4j", "num_tutorial" : 750 }
+-----------------------------------------------------------------------
+max 
+> db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$max : "$likes"}}}])
+{ "_id" : "tutorials point", "num_tutorial" : 100 }
+{ "_id" : "Neo4j", "num_tutorial" : 750 }
+{ "_id" : null, "num_tutorial" : 45 }
+---------------------------------------------------------------------
+push 
+#  	Inserts the value to an array in the resulting document.
+
+> db.mycol.aggregate([{$group : {_id : "$by_user", url : {$push: "$url"}}}])
+{ "_id" : null, "url" : [ "http://www.tutorialspoint.com" ] }
+{ "_id" : "Neo4j", "url" : [ "http://www.neo4j.com" ] }
+{ "_id" : "tutorials point", "url" : [ "http://www.tutorialspoint.com", "http://www.tutorialspoint.com" ] }
+---------------------------------------------------------------------------
+addToSet
+#Inserts the value to an array in the resulting document but does not create duplicates.
+
+
+> db.mycol.aggregate([{$group : {_id : "$by_user", url : {$addToSet : "$url"}}}])
+{ "_id" : "tutorials point", "url" : [ "http://www.tutorialspoint.com" ] }
+{ "_id" : null, "url" : [ "http://www.tutorialspoint.com" ] }
+{ "_id" : "Neo4j", "url" : [ "http://www.neo4j.com" ] }
+---------------------------------------------------------------------------
+Cursor Methods
+
+> var c1=db.mycol.find({"likes":{$gt:40}})
+> while(c1.hasNext()){print(tojson(c1.next()));}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5f8"),
+        "title" : "New MongoDB Tutorial",
+        "description" : "MongoDB is no sql database",
+        "by_user" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 100
+}
+{
+        "_id" : ObjectId("608fe1ef94bd3450b223e5fa"),
+        "title" : "Neo4j Overview",
+        "description" : "Neo4j is no sql database",
+        "by_user" : "Neo4j",
+        "url" : "http://www.neo4j.com",
+        "tags" : [
+                "neo4j",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 750
+}
+{
+        "_id" : ObjectId("608fe51c2ef5257592864750"),
+        "title" : "MongoDB Overview",
+        "description" : "MongoDB is no SQL database",
+        "by" : "tutorials point",
+        "url" : "http://www.tutorialspoint.com",
+        "tags" : [
+                "mongodb",
+                "database",
+                "NoSQL"
+        ],
+        "likes" : 45
+}
+---------------------------------------------------------------------
+mapReduce method
+
+> var mapfunction1 =function(){emit(this.by_user,this.likes)};
+
+> var reducefuinction1=function(keyByuser,valueslikes){return  Array.sum(valueslikes); };
+
+> db.mycol.mapReduce(mapfunction1,reducefuinction1,{out:"map_example"})
+{
+        "result" : "map_example",
+        "timeMillis" : 184,
+        "counts" : {
+                "input" : 4,
+                "emit" : 4,
+                "reduce" : 1,
+                "output" : 3
+        },
+        "ok" : 1
+}
+> show tables
+Studentmark
+map_example
+mycol
+> db.map_example.find()
+{ "_id" : null, "value" : 45 }
+{ "_id" : "Neo4j", "value" : 750 }
+{ "_id" : "tutorials point", "value" : 110 }
+------------------------------------------------------------------------------
