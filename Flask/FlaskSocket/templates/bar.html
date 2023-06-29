@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<title>Charts </title>
+		
+		<script src="{{url_for('static', filename='js/echarts.js')}}"></script>
+	</head>
+	<body>
+	
+
+          <div id="main" style="width: 800px;height:500px;border: solid;"></div>
+          <br>
+          <div id="main2" style="width: 800px;height:500px;border: solid;"></div>
+
+    <script type="text/javascript">
+      // Initialize the echarts instance based on the prepared dom
+      var myChart = echarts.init(document.getElementById('main'));
+      var myChart2 = echarts.init(document.getElementById('main2'));
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        title: {
+          text: 'ECharts Getting Started Example'
+        },
+        tooltip: {},
+        legend: {
+          data: ['sales']
+        },
+        xAxis: {
+          data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'sales12',
+            type: 'line',
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
+      };
+      var option2 = {
+        title: {
+          text: 'ECharts Getting Started Example'
+        },
+        tooltip: {},
+        legend: {
+          data: ['sales']
+        },
+        xAxis: {
+          name: 'CA',
+          data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'sales',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
+      };
+
+      // Display the chart using the configuration items and data just specified.
+      myChart.setOption(option);
+      myChart2.setOption(option2);
+    </script>
+	</body>
+</html>

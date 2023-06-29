@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title> Maps</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="crossorigin=""/>
+	<style type="text/css">
+		#map { height: 500px; }
+		#map2 { height: 500px; }
+	</style>
+</head>
+<body>
+	<h1>leafletjs Maps</h1>
+
+<div id="map"></div>
+	<h1>leafletjs Maps</h1>
+
+
+<div id="map2"></div>
+
+
+
+<h1>Servic Name </h1>
+<ol>
+	<li>
+		Elevation
+		<ol>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}'
+			</li>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade_Dark/MapServer/tile/{z}/{y}/{x}
+			</li>	
+		</ol>
+	</li>
+	<li>
+		Canvas
+		<ol>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}
+			</li>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}
+			</li>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
+			</li>
+			<li>
+				https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}
+			</li>
+
+		</ol>
+	</li>
+	<li>
+		World_Imagery ---> https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+	</li>
+	<li>
+		NatGeo_World_Map ---> https://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		USA_Topo_Maps ---> https://services.arcgisonline.com/arcgis/rest/services/USA_Topo_Maps/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		World_Physical_Map -->  https://services.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		World_Shaded_Relief ---> https://services.arcgisonline.com/arcgis/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		World_Street_Map  ---> https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		World_Terrain_Base ---> https://services.arcgisonline.com/arcgis/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}
+	</li>
+	<li>
+		World_Topo_Map --->  https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x} 	
+	</li>
+	<li>
+		Ocean
+		<ol>
+			<li>https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}</li>
+			<li>https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}</li>
+		</ol>
+	</li>
+	<li>
+		Polar
+		<ol>
+			<li>https://services.arcgisonline.com/arcgis/rest/services/Polar/Antarctic_Imagery/MapServer/tile/{z}/{y}/{x}</li>
+			<li>https://services.arcgisonline.com/arcgis/rest/services/Polar/Arctic_Imagery/MapServer/tile/{z}/{y}/{x}</li>
+		</ol>
+	</li>
+
+</ol>
+
+
+
+
+
+
+
+ <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="crossorigin=""></script>	
+ <script type="text/javascript">
+ 	var map = L.map('map').setView([18.492, 73.866], 13);
+
+
+
+ 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+	}).addTo(map);
+var marker = L.marker([18.492, 73.866]).addTo(map);
+	
+var circle = L.circle([18.5, 73.880], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 500
+}).addTo(map);
+
+var polygon = L.polygon([
+    [18.497,73.858],
+    [18.488, 73.847],
+    [18.485, 73.864]
+]).addTo(map);
+
+marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+circle.bindPopup("I am a circle.");
+polygon.bindPopup("I am a polygon.");
+
+
+var popup = L.popup()
+    .setLatLng([18.492, 73.866	])
+    .setContent("I am a standalone popup.")
+    .openOn(map);
+
+
+    function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+}
+
+map.on('click', onMapClick);
+
+
+var popup = L.popup();
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+map.on('click', onMapClick);
+ </script>
+
+
+
+ <script>
+
+    var map2 = L.map('map2').setView([18.492, 73.866], 12);
+    L.tileLayer(
+        'https://services.arcgisonline.com/arcgis/rest/services/Polar/Arctic_Ocean_Base/tile/{z}/{y}/{x}', {
+        attribution: '© OpenStreetMap',
+        maxZoom: 18,
+        }).addTo(map2);
+    var marker = L.marker([18.492, 73.866]).addTo(map2);
+
+</script>
+</body>
+</html>
+

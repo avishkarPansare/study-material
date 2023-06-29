@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var socket = io.connect('http://127.0.0.1:5000');
+           
+        console.log("I am in document!!")
+        $(document).ready(function(){
+           
+            
+            socket.on('connect',function(){
+                socket.send("User has connected");
+            });
+
+             socket.emit('msg',"success");
+                
+         
+           
+        });
+        function myFunction() {
+            var fname = document.getElementById("fname").value;
+            var lname = document.getElementById("lname").value;
+            var roomName = document.getElementById("roomName").value;
+            var msg = document.getElementById("msg").value;
+            if (fname) {
+                console.log(fname)
+                socket.emit('userinput',fname);
+                socket.emit('my event', {'fname': fname,'lname':lname});
+            }
+            else if (msg) {
+                    console.log(msg)
+            }
+            else {
+                    console.log(roomName)
+                    socket.emit('join',{'room':roomName});
+            }
+        }
+        socket.on('response',function(fname){
+                $("#listid").append('<li>'+fname+'</li>');
+                console.log(fname);
+            });
+                
+    </script>
+
+    <table>
+        <tr>
+            <td>
+                <label>Enter Room Name </label>                
+            </td>
+            <td>
+                <input type="text" name="roomName" id="roomName">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Message</label>
+            </td>
+            <td>
+                <input type="text" name="msg" id="msg">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>First Name</label> 
+            </td>
+            <td>
+                <input type="text" id="fname">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Last Name</label> 
+            </td>
+            <td>
+                <input type="text" id="lname">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="sendbtn" onclick="myFunction()">send </button>
+            </td>
+        </tr>
+    </table>
+    
+    
+
+    <ul id="listid"></ul>
+</body>
+</html>

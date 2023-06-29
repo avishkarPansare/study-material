@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+ <html lang="en">
+
+ <head>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ </head>
+
+ <body>
+<input type="text" id="name"><br>
+<input type="button" value="submit" onclick="sendData()">
+<table id="student" class="table-dark table table-striped table-bordered" style="width:100%">
+    <thead class="tx-white">
+                                <tr id="tablehead" >
+                                <th>Student Id</th>
+                                <th>fname</th>
+                                <th>Lname</th>
+                                <th>City</th>
+                                <th>Country</th>
+                                
+                               </tr>
+                            </thead>
+                            <tbody id="tablebody">
+
+                            </tbody>
+</table>
+
+<button onclick="countFun()"> Check Count</button>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+     $.fn.dataTable.ext.errMode = 'none';
+    // $(document).ready(function() {
+    //     console.log("In ajax function out")
+    //   $('#form').on('submit',function(e){
+    //     console.log("In ajax function")
+    //     $.ajax({
+    //       data : {
+    //         name : $('#name').val(),
+    //         pass : $('#pass').val(),
+    //       },
+    //       type : 'POST',
+    //       url : '/'
+    //     })
+    //     .done(function(data){
+    //       $('#output').text(data.output).show();
+    //     });
+    //     e.preventDefault();
+    //   });
+    // });
+// function sendData () {
+
+$.ajax({
+          data : {
+            name : $('#name').val(),
+          },
+          type : 'POST',
+          url : '/',
+          success:function(data)
+        {
+            var idString="<tr>";
+            student = data['studentdata']
+            for(var j=0 ;j<student.length;j++){
+                idString +='<td>'+student[j]['_id']+'</td>'
+                idString +='<td>'+student[j]['fname']+'</td>'
+                idString +='<td>'+student[j]['Lname']+'</td>'
+                idString +='<td>'+student[j]['City']+'</td>'
+                idString +='<td>'+student[j]['Country']+'</td>'
+                idString +='</tr>'
+            }
+            // idString +='</table>'
+            document.getElementById('tablebody').innerHTML = idString;
+            // console.log(table.rows( { selected: true } ).count())
+            $('#student').DataTable(
+                {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                    ],
+                    columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                    } ],
+                    // select: {
+                    //     style:    'os',
+                    //     selector: 'td:first-child'
+                    // },
+                    'select': {
+                                 'style': 'multi'
+                              },
+
+                });
+            
+
+        }
+        })
+       
+
+// }
+
+function countFun () {
+    console.log("In Count Function")
+    var table = $('#student').DataTable(
+                {})
+    console.log(table.rows( { selected: true } ))
+// //     console.log(table.rows( { selected: true } ).count())
+}
+
+
+</script>
+ </body>
+
+ </html>

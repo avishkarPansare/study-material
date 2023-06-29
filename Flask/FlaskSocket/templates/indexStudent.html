@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"></link>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   
+
+</head>
+<body>
+<div id="table_buttons">
+
+  </div>
+  <div id="table_button">
+
+  </div>
+
+ 
+
+    <table class="table table-sm table-striped table-bordered pt-2 pb-2" style="width:100%" id="studenttable">
+                        <thead class="bg-dark tx-white">
+                                <tr>
+                                <!-- <th>Student Id</th> -->
+                                <th>fname</th>
+                                <th>Lname</th>
+                                <th>City</th>
+                                <th>Country</th>
+                                <th>Edit</th>
+
+                               </tr>
+                            </thead>
+                            <tbody id="tablebody">
+
+                            </tbody>
+    </table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="modalBodyData">
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+    <button class="w-100" data-target="#Modal" data-toggle="modal">New Data Insert</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="datainsert">
+            <table class='table'>
+                <form>
+                      <tr>
+
+                    <td><label>id</label></td>
+                    <td><input type="text"  id="Studentid"></td>
+                </tr>
+                    <tr>
+
+                    <td><label>Frist Name </label></td>
+                    <td><input type="text"  id="studentfname"></td>
+                </tr>
+                <tr>
+                    <td><label>Last Name </label></td>
+                    <td><input type="text"  id="stdentLname"></td>
+                </tr>
+                <tr>
+                    <td><label>City </label></td>
+                    <td><input type="text" id="stdentCity"></td>
+                </tr>
+                <tr>
+                    <td><label>Country</label></td>
+                    <td><input type="text" id="stdentcountry"></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></td> 
+                    <td><button type="submit" class="btn btn-primary" onclick="NewDataInsert()" data-dismiss="modal">Save changes</button></td>
+                </tr>
+                </form>
+            </table>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row mt-5">
+    <button class="w-100"  data-target="#FileModal" data-toggle="modal">FileUpload</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="FileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="datainsert">
+           <!--  <table class='table'>
+                <form actin="http://192.168.1.40:8001/uploader" method="POST">
+                      <tr>
+
+                    <td><label>File</label></td>
+                    <td><input type="file"  id="FileData"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" name="SUBMIT"></td>
+                </tr>
+                    <td><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></td> 
+                    <td><button type="submit" class="btn btn-primary" onclick="fileUpload()" data-dismiss="modal">Save changes</button></td>
+                </tr>
+                </form>
+            </table> -->
+            <form action = "http://192.168.1.40:8001/uploader" method = "POST" 
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input type = "submit"/>
+      </form>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<div id="main" style="width: 100%;height:500px;border: solid;"></div>
+          <br>
+<script src="{{url_for('static', filename='js/echarts.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ <script type="text/javascript">
+   
+        //     $(document).ready(function () {
+        //     $('#studenttable').DataTable();
+        // });
+        $.fn.dataTable.ext.errMode = 'none';
+        var socket = io.connect('http://'+document.domain+':'+location.port);
+        console.log("I am in document!!")
+       socket.emit('student_rec',"success");
+
+        socket.on('StudentData',function(data){
+            $("#studenttable").dataTable().fnDestroy()  
+            console.log(data)
+                var studentname = [] 
+                var studentID = [] 
+                console.log("Student")
+                var keys =  ['fname', 'Lname', 'City', 'Country' ];
+                var inner_html="";
+
+                for(var j=0; j< data.length;j++){
+                    studentname.push(String(data[j]['fname']))
+                    studentID.push(j+1)
+                    inner_html+='<tr id= Student'+String(data[j]['UID'])+'>';
+
+                    
+                        // inner_html += '<td >'+String(j+1)+'</td>';
+                        inner_html += '<td>'+String(data[j]['fname'])+'</td>';
+                        inner_html += '<td>'+String(data[j]['Lname'])+'</td>';
+                        inner_html += '<td id= City'+String(data[j]['UID'])+'>'+String(data[j]['City'])+'</td>';
+                        inner_html += '<td id= Country'+String(data[j]['UID'])+'> '+String(data[j]['Country'])+'</td>';
+                        inner_html += '<td><button type="button" id="'+data[j]['UID']+'" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getDataId(this)">Edit</button></td>';  //\''+data[j]['UID']+'\'
+                    
+                    inner_html += '</tr>';
+
+                }
+              
+                document.getElementById("tablebody").innerHTML = inner_html;
+                // $("#studenttable").dataTable().fnDestroy();
+                //     //Append stuff to my table
+                // $("#studenttable").DataTable({ "bDestroy": true, ... });
+
+
+
+                
+                // table.ajax.reload();
+                $('#studenttable').DataTable({
+                    "Destroy": true
+                });
+                // $('#studenttable').DataTable().clear();
+                EchartLoad (studentname,studentID);
+
+
+});
+        
+
+        function getDataId(dataId) {
+            console.log(dataId.id);
+            socket.emit('student_getData',dataId.id);
+        }
+        
+        socket.on('StudentDataID',function(data){
+            console.log(data);
+            var inner_html = "";
+            for(var j=0;j<data.length;j++){
+                inner_html+="<table class='table'><form>";
+                inner_html += '<tr><td><label></label></td><td><input type="hidden" id="Studentid" readonly value='+String(data[j]['UID'])+'></td><tr>';
+                inner_html += '<tr><td><label>Frist Name </label></td><td><input type="text" readonly id="studentfname" value='+String(data[j]['fname'])+'></td><tr>';
+                inner_html += '<tr><td><label>Last Name </label></td><td><input type="text" readonly id="stdentLname" value='+String(data[j]['Lname'])+'></td><tr>';
+                inner_html += '<tr><td><label>City </label></td><td><input type="text" id="stdentCity" value='+String(data[j]['City'])+'></td><tr>';
+                inner_html += '<tr><td><label>Country</label></td><td><input type="text" id="stdentcountry" value='+String(data[j]['Country'])+'></td><tr>';
+                inner_html +='<tr><td><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></td> <td><button type="submit" class="btn btn-primary" onclick="doForm()" data-dismiss="modal">Save changes</button></td></tr>'
+                inner_html+="</form>";
+
+
+            }
+            document.getElementById("modalBodyData").innerHTML = inner_html;
+        });
+
+        function doForm () {
+            var UID= document.getElementById("Studentid").value
+            var Fname= document.getElementById("studentfname").value
+            var Lname = document.getElementById("stdentLname").value
+            var City = document.getElementById("stdentCity").value
+            var Country = document.getElementById("stdentcountry").value
+            var data = {
+                "UID":UID,
+                "Fname":Fname,
+                "Lname":Lname,
+                "City":City,
+                "Country":Country
+            }
+            console.log(data)
+            socket.emit('studentUpdateId',data);
+            // window.location.reload();
+        }
+        
+         socket.on('Student_UpdateID',function(data){
+            console.log(data);
+            var inner_html = ""
+            for(var j=0;j<data.length;j++){
+
+                        // inner_html += '<td >'+String(data[j]['UID'])+'</td>';
+                        inner_html += '<td>'+String(data[j]['fname'])+'</td>';
+                        inner_html += '<td>'+String(data[j]['Lname'])+'</td>';
+                        inner_html += '<td id= City'+String(data[j]['UID'])+'>'+String(data[j]['City'])+'</td>';
+                        inner_html += '<td id= Country'+String(data[j]['UID'])+'> '+String(data[j]['Country'])+'</td>';
+                        inner_html += '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getDataId('+String(data[j]['UID'])+')">Edit</button></td>';
+                    
+                    // inner_html += '</tr>';
+
+                // // document.getElementById('Country'+String(data[j]['_id'])).innerHTML = data[j]['Country'];
+                // // document.getElementById('City'+String(data[j]['_id'])).innerHTML = data[j]['City'];
+                console.log(document.getElementById('Student'+String(data[j]['UID'])).innerHTML )
+                document.getElementById('Student'+String(data[j]['UID'])).innerHTML = inner_html
+
+
+            }
+        });
+        
+// Echarts
+function EchartLoad (xdata,ydata) {
+// console.log(studentname)
+// console.log("Student Id",studentID)
+var myChart = echarts.init(document.getElementById('main'));
+      // Specify the configuration items and data for the chart
+      var option = {
+        title: {
+          text: 'ECharts Getting Started Example'
+        },
+        tooltip: {},
+        legend: {
+          data: ['sales']
+        },
+        xAxis: {
+          name: 'CA',
+          data: xdata
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'sales',
+            type: 'line',
+            data: ydata,
+            areaStyle: {}
+          }
+        ]
+      };
+      // Display the chart using the configuration items and data just specified.
+      myChart.setOption(option);
+}
+
+function fileUpload(){
+    const files = document.getElementById("FileData");
+
+        
+}
+
+
+
+
+
+function NewDataInsert () {
+            var UID= document.getElementById("Studentid").value
+            var Fname= document.getElementById("studentfname").value
+            var Lname = document.getElementById("stdentLname").value
+            var City = document.getElementById("stdentCity").value
+            var Country = document.getElementById("stdentcountry").value
+            var data = {
+                "UID":UID,
+                "Fname":Fname,
+                "Lname":Lname,
+                "City":City,
+                "Country":Country
+            }
+            console.log(data)
+            socket.emit('studentinsert',data);
+            // window.location.reload();
+        }
+
+
+
+
+
+</script>
+
+</script>
+</body>
+</html>

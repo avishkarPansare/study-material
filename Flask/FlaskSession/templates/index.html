@@ -1,0 +1,5 @@
+{% if session.name %}
+You are Register {{ session.name }} <a href="/logout">logout</a>.
+{% else %}
+You are not Register. <a href="/login">login</a>.
+{% endif %}

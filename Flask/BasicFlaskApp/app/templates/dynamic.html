@@ -1,0 +1,68 @@
+<html>
+    {% if title == 'Student' %}
+        <head>
+            <title>
+             {{title}}
+            </title>
+        </head>
+        <body>
+             <h1> Name : {{user.Fname}} {{user.Lname}}</h1>
+             <table border="1px"> 
+                <tr>
+                    <th>
+                        Student Name 
+                    </th>
+                    <th>
+                        Python
+                    </th>
+                    <th>
+                        Java
+                    </th>
+                    <th>
+                        C
+                    </th>
+                    <th>
+                        DSA
+                    </th>
+                </tr>
+                {% for student in students %}
+                <tr>
+                    <td>
+                        {{student.name}} 
+                    </td>
+                    <td>
+                        {{student.marks.Python}} 
+                 
+                    </td>
+                    <td>
+                        {{student.marks.Java}} 
+                   
+                    </td>
+                    <td>
+                        {{student.marks.C}} 
+                      
+                    </td>
+                    <td>
+                        {{student.marks.DSA}} 
+                      
+                    </td>
+                </tr>
+                {% endfor %}
+             </table>
+        </body>
+    {% else %}
+    <head>
+        <title>
+         {{title}}
+        </title>
+    </head>
+    <body>
+         <h1> {{user.username}}!!!!!</h1>
+    </body>
+
+    {% endif %}
+
+
+
+
+</html>

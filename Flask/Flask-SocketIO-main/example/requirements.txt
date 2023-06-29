@@ -1,0 +1,14 @@
+
+Flask
+Flask-Login
+Flask-Session
+Flask-SocketIO
+importlib-metadata
+itsdangerous
+Jinja2
+
+python-engineio
+python-socketio
+six
+Werkzeug
+zipp

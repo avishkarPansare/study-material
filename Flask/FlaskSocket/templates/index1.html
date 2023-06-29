@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var socket = io.connect('http://'+document.domain+':'+location.port);
+        console.log(socket)
+        console.log("I am in document!!")
+        $(document).ready(function(){
+           
+            
+            socket.on('connect',function(){
+                socket.send("User has connected");
+            });
+
+             socket.emit('msg',"success");
+                
+         
+           
+        });
+        function chat() {
+           
+            var roomName = document.getElementById("roomName").value;
+            var msg = document.getElementById("msg").value;
+           
+
+            if (roomName) {
+                    console.log(roomName)
+                    // socket.emit('join',{'room':roomName});
+                    if (msg) {
+                    console.log(msg)
+                    socket.emit('Gmsg',{'msg':msg,'room':roomName});
+
+                    }
+            }
+        }
+
+         function createRoom() {
+            var roomName = document.getElementById("roomName").value;
+            if (roomName) {
+                    socket.emit('join',{'room':roomName});
+         
+            }
+        }
+
+        function leaveRoom() {
+            console.log("leaveRoom")
+            var roomName = document.getElementById("roomName").value;
+            if (roomName) {
+                            console.log("leaveRoom")
+
+                    socket.emit('leave',{'room':roomName});
+         
+            }
+        }
+
+        socket.on('avishkar',function(data){
+            console.log(data['room']);
+            var roomName = document.getElementById("roomName").value;
+            console.log(roomName)
+            if (data['room'] == roomName){
+                $("#listid1").append('<li>'+data['msg']+'</li>');
+            }
+            
+        });
+
+
+
+        socket.on('RoomName',function(data){
+
+            document.getElementById("Room").innerHTML = data['room'];
+                // $("#listid").'<li>'+data['room']+'</li>';
+            
+              
+            });
+       
+                
+    </script>
+
+    <table>
+        <tr>
+            <td>
+                <label>Enter Room Name </label>                
+            </td>
+            <td>
+                <input type="text" name="roomName" id="roomName">
+            </td>
+        </tr>
+         <tr>
+            <td >
+                <button id="sendbtn" onclick="createRoom()">Join Room </button>
+            </td>
+            <td >
+                <button id="sendbtn" onclick="leaveRoom()" >Leave Room </button>
+            </td>
+            
+        </tr>
+        <tr>
+            <td>
+                <label>Message</label>
+            </td>
+            <td>
+                <input type="text" name="msg" id="msg">
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2">
+                <button id="sendbtn" onclick="chat()">send Message</button>
+            </td>
+            
+        </tr>
+    </table>
+    
+    
+    Room Name
+    <p id="Room"></p>
+    Msg 
+    <ul id="listid1"></ul>
+
+</body>
+</html>
